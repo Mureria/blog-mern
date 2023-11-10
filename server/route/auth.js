@@ -17,6 +17,10 @@ router.post('/register', async(req, res) =>{
             password: hashedPassword
         });
 
+        if(newUser) {
+          return res.status(302).json('User already exists! Please login.');
+        }
+
         // Save user in the db
         const user = await newUser.save();
 
@@ -44,7 +48,7 @@ router.post('/login', async(req, res) =>{
     
         if (user && (await bcrypt.compare(password, user.password))) {
     
-          res.status(200).json(user);
+          return res.status(200).json('Successfully logged in');
         }
         res.status(400).send("Invalid Credentials");
       } catch (err) {
